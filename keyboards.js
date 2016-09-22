@@ -53,5 +53,5 @@ let nameKeyboard = {
 };
 
 module.exports = {
-	inactiveKeyboard, activeKeyboard
+	inactiveKeyboard, activeKeyboard, nameKeyboard, settingsKeyboard
 }

@@ -6,6 +6,7 @@ let users = {};
 
 const WAITING = 'waiting';
 const TALKING = 'talking';
+const WAITINGNEWNAME = 'waitingnewname'
 
 var api = new telegram({
         token: '226303585:AAESI73YnfVa3v8gxVAhXCmc0eEvG7tUePY',
@@ -81,7 +82,7 @@ api.on('message', function(message)
 		}
 		return;
 	}
-	if (user.status===WAITINGNEWNAME){
+	if (user.status === WAITINGNEWNAME){
 		let user = users[userId];
 		user = {
 			name: message,
