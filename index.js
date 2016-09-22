@@ -88,6 +88,7 @@ api.on('message', function(message)
 			name: message,
 			status: WAITING
 		};
+        sendText(userId, "You new name is " + message, keyboards.activeKeyboard);
 		return;
 	}
 
