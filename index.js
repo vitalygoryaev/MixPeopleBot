@@ -11,7 +11,7 @@ var api = new telegram({
         token: '226303585:AAESI73YnfVa3v8gxVAhXCmc0eEvG7tUePY',
 		updates: {
             enabled: true,
-			get_interval: 300
+			get_interval: 100
     	}
 });
 
