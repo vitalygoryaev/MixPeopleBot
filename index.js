@@ -11,7 +11,7 @@ var api = new telegram({
         token: '226303585:AAESI73YnfVa3v8gxVAhXCmc0eEvG7tUePY',
 		updates: {
             enabled: true,
-			get_interval: 100
+			get_interval: 300
     	}
 });
 
@@ -29,6 +29,7 @@ api.on('message', function(message)
 {
 	let userId = message.chat.id;
 
+
     if (message.text === '/start') {
 		let user = users[userId];
 
@@ -38,6 +39,16 @@ api.on('message', function(message)
 				name: message.chat.first_name
 			};
 			users[userId] = user;
+			sendText(userId, "Hi! Now we will find you a companion. Please wait.",  keyboards.activeKeyboard);
+
+
+
+			let currentUsers = _.pick(users, (user, currentUserId, object) => {
+					return userId;
+		});
+		let currentUsersKeys = Object.keys(currentUsers).length;
+
+			sendText(userId, "Now " + currentUsersKeys +" people talking",  keyboards.activeKeyboard);
 		}
 
 		if (user.status !== WAITING) {
@@ -48,6 +59,37 @@ api.on('message', function(message)
 
 		return;
 	}
+
+	if (message.text === '/settings') {
+		let user = users[userId];
+
+		if (user) {
+			sendText(userId, "Settings", keyboards.settingsKeyboard);
+		}
+		//users[userId] = user;
+		return;
+	}
+	if (message.text === '/name') {
+		let user = users[userId];
+
+		if (user) {
+			sendText(userId, "Set you name", keyboards.nameKeyboard);
+			user = {
+				status: WAITINGNEWNAME
+			};
+			users[userId] = user;
+		}
+		return;
+	}
+	/*if (user.status===WAITINGNEWNAME){
+		let user = users[userId];
+		user = {
+			name: message,
+			status: WAITING
+		};
+		return;
+	}*/
+
 
 	if (message.text === '/stop') {
 		let user = users[userId];
@@ -60,6 +102,7 @@ api.on('message', function(message)
 
 		return;
 	}
+
 
 	if (message.text === '/next') {
 		let user = users[userId];

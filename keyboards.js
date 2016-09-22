@@ -4,6 +4,9 @@ let inactiveKeyboard = {
 			text: '/start'
 		},
 		{
+			text: '/settings'
+		},
+		{
 			text: '/help'
 		}
 	]],
@@ -16,7 +19,34 @@ let activeKeyboard = {
 			text: '/next'
 		},
 		{
+			text: '/settings'
+		},
+		{
 			text: '/stop'
+		}
+	]],
+	resize_keyboard: true
+};
+
+let settingsKeyboard = {
+	keyboard: [[
+		{
+			text: '/back'
+		},
+		{
+			text: '/region'
+		},
+		{
+			text: '/name'
+		}
+	]],
+	resize_keyboard: true
+};
+
+let nameKeyboard = {
+	keyboard: [[
+		{
+			text: '/backToSettings'
 		}
 	]],
 	resize_keyboard: true
