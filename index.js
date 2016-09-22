@@ -70,15 +70,16 @@ api.on('message', function(message)
 		//users[userId] = user;
 		return;
 	}
-	if (message.text === '/name') {
-		let user = users[userId];
 
-		if (user) {
-			sendText(userId, "Set you name", keyboards.nameKeyboard);
-			user.status = WAITINGNEWNAME;
-		}
-		return;
-	}
+if (message.text === '/name') {
+    let user = users[userId];
+
+    if (user) {
+        sendText(userId, "Set you name", keyboards.nameKeyboard);
+        user.status = WAITINGNEWNAME;
+    }
+    return;
+}
 
 	if (message.text === '/stop') {
 		let user = users[userId];
@@ -91,6 +92,7 @@ api.on('message', function(message)
 
 		return;
 	}
+
 
 	if (message.text === '/next') {
 		let user = users[userId];
@@ -109,16 +111,13 @@ api.on('message', function(message)
 		sendInactiveInstruction(userId);
 		return;
 	}
-
-	if (user.status === WAITINGNEWNAME){
-		let user = users[userId];
-		user.name = message.text;
-		user.status = WAITING;
-		
-		sendText(userId, "You new name is " + message.text, keyboards.activeKeyboard);
-		
-		return;
-	}
+    if (user.status === WAITINGNEWNAME){
+        let user = users[userId];
+        user.name = message.text;
+        user.status = WAITING;
+        sendText(userId, "You new name is " + message.text, keyboards.activeKeyboard);
+        return;
+    }
 
 	passMessageToOpponent(userId, message);
 });

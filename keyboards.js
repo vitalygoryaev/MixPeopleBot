@@ -43,6 +43,15 @@ let settingsKeyboard = {
 	resize_keyboard: true
 };
 
+let settingsSelectTheme = {
+	keyboard: [[
+		{
+			text: '/All'
+		}
+	]],
+	resize_keyboard: true
+};
+
 let nameKeyboard = {
 	keyboard: [[
 		{
@@ -53,5 +62,5 @@ let nameKeyboard = {
 };
 
 module.exports = {
-	inactiveKeyboard, activeKeyboard, nameKeyboard, settingsKeyboard
+	inactiveKeyboard, activeKeyboard, nameKeyboard, settingsKeyboard, settingsSelectTheme
 }
