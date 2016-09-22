@@ -6,7 +6,7 @@ let users = {};
 
 const WAITING = 'waiting';
 const TALKING = 'talking';
-const WAITINGNEWNAME = 'waitingnewname'
+const WAITINGNEWNAME = 'waitingnewname';
 
 var api = new telegram({
         token: '226303585:AAESI73YnfVa3v8gxVAhXCmc0eEvG7tUePY',
@@ -75,22 +75,10 @@ api.on('message', function(message)
 
 		if (user) {
 			sendText(userId, "Set you name", keyboards.nameKeyboard);
-			user = {
-				status: WAITINGNEWNAME
-			};
-			users[userId] = user;
+			user.status = WAITINGNEWNAME;
 		}
 		return;
 	}
-	if (user.status === WAITINGNEWNAME){
-		let user = users[userId];
-		user = {
-			name: message,
-			status: WAITING
-		};
-		return;
-	}
-
 
 	if (message.text === '/stop') {
 		let user = users[userId];
@@ -103,7 +91,6 @@ api.on('message', function(message)
 
 		return;
 	}
-
 
 	if (message.text === '/next') {
 		let user = users[userId];
@@ -120,6 +107,14 @@ api.on('message', function(message)
 		}
 
 		sendInactiveInstruction(userId);
+		return;
+	}
+
+	if (user.status === WAITINGNEWNAME){
+		let user = users[userId];
+		user.name = message.text;
+		user.status = WAITING;
+		
 		return;
 	}
 
