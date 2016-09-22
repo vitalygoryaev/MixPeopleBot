@@ -31,11 +31,12 @@ let activeKeyboard = {
 let settingsKeyboard = {
 	keyboard: [[
 		{
-			text: '/back'
-		},
-		{
 			text: '/region'
 		},
+		{
+			text: '/back'
+		},
+
 		{
 			text: '/name'
 		}
