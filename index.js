@@ -115,6 +115,8 @@ api.on('message', function(message)
 		user.name = message.text;
 		user.status = WAITING;
 		
+		sendText(userId, "You new name is " + message.text, keyboards.activeKeyboard);
+		
 		return;
 	}
 
