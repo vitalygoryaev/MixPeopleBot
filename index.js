@@ -81,14 +81,14 @@ api.on('message', function(message)
 		}
 		return;
 	}
-	/*if (user.status===WAITINGNEWNAME){
+	if (user.status===WAITINGNEWNAME){
 		let user = users[userId];
 		user = {
 			name: message,
 			status: WAITING
 		};
 		return;
-	}*/
+	}
 
 
 	if (message.text === '/stop') {
