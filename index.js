@@ -1,14 +1,11 @@
 let telegram = require('telegram-bot-api');
 let _ = require('underscore');
-var keyboards = require("./keyboards.js");
+let keyboards = require("./keyboards.js");
+let status = require('./userStatus.js');
 
 let users = {};
 
-const WAITING = 'waiting';
-const TALKING = 'talking';
-const WAITINGNEWNAME = 'waitingnewname';
-
-var api = new telegram({
+let api = new telegram({
         token: '226303585:AAESI73YnfVa3v8gxVAhXCmc0eEvG7tUePY',
 		updates: {
             enabled: true,
@@ -30,34 +27,27 @@ api.on('message', function(message)
 {
 	let userId = message.chat.id;
 
-
     if (message.text === '/start') {
 		let user = users[userId];
 
 		if (!user) {
 			user = {
-				status: WAITING,
+				status: status.WAITING,
 				name: message.chat.first_name
 			};
 			users[userId] = user;
-			sendText(userId, "Hi! Now we will find you a companion. Please wait.",  keyboards.activeKeyboard);
 
+			let numberOfActiveUsers = _.size(users);
 
-
-			let currentUsers = _.pick(users, (user, currentUserId, object) => {
-					return userId;
-		});
-		let currentUsersKeys = Object.keys(currentUsers).length;
-
-			sendText(userId, "Now " + currentUsersKeys +" people talking",  keyboards.activeKeyboard);
+			sendText(userId, "Hi! Now we will find you a companion. Please wait.",  keyboards.activeKeyboard)
+				.then(() => sendText(userId, "Now " + numberOfActiveUsers +" people talking",  keyboards.activeKeyboard));
 		}
 
-		if (user.status !== WAITING) {
+		if (user.status !== status.WAITING) {
 			return;
 		}
 
 		findOpponentAndLink(userId);
-
 		return;
 	}
 
@@ -67,7 +57,7 @@ api.on('message', function(message)
 		if (user) {
 			sendText(userId, "Settings", keyboards.settingsKeyboard);
 		}
-		//users[userId] = user;
+
 		return;
 	}
 
@@ -76,8 +66,9 @@ if (message.text === '/name') {
 
     if (user) {
         sendText(userId, "Set you name", keyboards.nameKeyboard);
-        user.status = WAITINGNEWNAME;
+        user.status = status.WAITINGFORNAME;
     }
+
     return;
 }
 
@@ -98,7 +89,7 @@ if (message.text === '/name') {
 		let user = users[userId];
 
 		if (user) {
-			if (user.status === TALKING) {
+			if (user.status === status.TALKING) {
 				let opponentId = unlinkOpponents(userId);
 
 				findOpponentAndLink(userId);
@@ -111,10 +102,10 @@ if (message.text === '/name') {
 		sendInactiveInstruction(userId);
 		return;
 	}
-    if (user.status === WAITINGNEWNAME){
+    if (user.status === status.WAITINGFORNAME) {
         let user = users[userId];
         user.name = message.text;
-        user.status = WAITING;
+        user.status = status.WAITING;
         sendText(userId, "You new name is " + message.text, keyboards.activeKeyboard);
         return;
     }
@@ -123,7 +114,7 @@ if (message.text === '/name') {
 });
 
 function sendText(chatId, text, keyboard) {
-	api.sendMessage({
+	return api.sendMessage({
 		chat_id: chatId,
 		text: text,
 		reply_markup: JSON.stringify(keyboard)
@@ -136,7 +127,7 @@ function sendInactiveInstruction(userId) {
 
 function getWaitingUser(userId) {
 	let waitingUsers = _.pick(users, (user, currentUserId, object) => {
-		return currentUserId != userId && user.status === WAITING;
+		return currentUserId != userId && user.status === status.WAITING;
 	});
 
 	let waitingUsersKeys = Object.keys(waitingUsers);
@@ -153,9 +144,9 @@ function linkOpponents(userId, opponentId) {
 	let opponent = users[opponentId];
 	let user = users[userId];
 
-	user.status = TALKING;
+	user.status = status.TALKING;
 	user.opponentId = opponentId;
-	opponent.status = TALKING;
+	opponent.status = status.TALKING;
 	opponent.opponentId = userId;
 	sendText(userId, `Meet ${opponent.name}!`, keyboards.activeKeyboard);
 	sendText(opponentId, `Meet ${user.name}!`, keyboards.activeKeyboard);
@@ -164,12 +155,12 @@ function linkOpponents(userId, opponentId) {
 function unlinkOpponents(userId) {
 	let user = users[userId];
 	let opponentId = user.opponentId;
-	user.status = WAITING;
+	user.status = status.WAITING;
 	user.opponentId = undefined;
 	
-	if (opponentId) {
+	if (opponentId && users[opponentId]) {
 		let opponent = users[opponentId];
-		opponent.status = WAITING;
+		opponent.status = status.WAITING;
 		opponent.opponentId = undefined;
 	}
 
@@ -177,6 +168,12 @@ function unlinkOpponents(userId) {
 }
 
 function findOpponentAndLink(userId) {
+	let user = users[userId];
+	
+	if (!user || user.status !== status.WAITING) {
+		return;
+	}
+	
 	let opponentId = getWaitingUser(userId);
 
 	if (opponentId) {
