@@ -15,7 +15,7 @@ end)
 box.once('create_users_space', function()
 		box.schema.space.create('users')
 		box.space.users:create_index('primary', { type = 'tree', unique = true, parts = { 1, 'unsigned' }})
-		box.space.users:create_index('vendor', { type = 'hash', unique = true, parts = { 2, 'str', 3, 'nuunsignedm' }}) -- vendor, vendor's userId
+		box.space.users:create_index('vendor', { type = 'hash', unique = true, parts = { 2, 'str', 3, 'unsigned' }}) -- vendor, vendor's userId
 end)
 
 box.once('create_waitingUsers_space', function()
