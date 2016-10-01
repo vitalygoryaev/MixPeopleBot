@@ -4,14 +4,11 @@ conn.connect()
 .then(function(){
   //auth for login, password
   console.log('connected')
-  return conn.auth('worker', 'workwork');
-}).then(function(){
-  // select arguments space_id, index_id, limit, offset, iterator, key
-  return conn.select(512, 0, 1, 0, 'eq', [50]);
+  return conn.auth('worker', '123');
+}).then(() => {
+    return conn.call('getUser', 'facebook', 12345, 'dima');
 })
-.then(function(results) {
-  console.log(results)
+.then(function(result) {
+  console.log(result);
 })
-.catch(error => console.log(error))
-
-console.log("SUCCESSSSSSSSSS")
+.catch(error => console.log(error));
