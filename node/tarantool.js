@@ -1,10 +1,10 @@
 var TarantoolConnection = require('tarantool-driver');
-var conn = new TarantoolConnection({port: 3301});
+var conn = new TarantoolConnection({host: 'tarantool', port: 3301});
 conn.connect()
 .then(function(){
   //auth for login, password
   console.log('connected')
-  return conn.auth('worker', '123');
+  return conn.auth('worker', 'workwork');
 }).then(() => {
     return conn.call('getUser', 'facebook', 12345, 'dima');
 })

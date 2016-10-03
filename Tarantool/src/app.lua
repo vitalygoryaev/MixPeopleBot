@@ -2,13 +2,13 @@
 
 box.cfg {
 	listen=3301,
-	slab_alloc_arena = 1 -- one gb memory limit
+	slab_alloc_arena=0.5
 }
 
-box.schema.user.passwd('admin', os.getenv("ADMIN_PASSWORD") or '123')
+box.schema.user.passwd('admin', os.getenv("ADMIN_PASSWORD"))
 
 box.once('create_user_for_nodejs', function()
-		box.schema.user.create('worker', { password = os.getenv("WORKER_PASSWORD") or '123' })
+		box.schema.user.create('worker', { password = os.getenv("WORKER_PASSWORD") })
 		box.schema.user.grant('worker','read,write,execute','universe')
 end)
 
