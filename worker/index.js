@@ -20,12 +20,14 @@ require('./lib/queue.js').get('rabbit', 'worker', 'workwork', 'messages')
                     console.log('got result from getUser tarantool\n', result);
                     
                     if (!result.success) {
+			console.log('rejecting because tarantool returned success false');
                         return reject(result);
                     }
 
                     return result.result;
                 })
                 .then(user => {
+			console.log('user info: ', user);
                     processMessage(user, content.message);
                 })
         })
