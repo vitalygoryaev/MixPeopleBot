@@ -1,5 +1,5 @@
 "use strict";
-let queue = require('../lib/queue.js').get('rabbit', 'worker', 'workwork', 'messages');
+let queue = require('lib/queue.js').get('rabbit', 'worker', 'workwork', 'messages');
 
 queue.subscribe(function handler(content) {
     console.log(content.vendor);
