@@ -10,7 +10,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "tarantool-driver": "^2.0.1",
     "telegram-bot-api": "^1.2.0",
     "amqplib": "^0.4.2"
   }
