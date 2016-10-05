@@ -7,6 +7,7 @@ run:
 	-docker rm -f $(IMAGE_NAME)
 	-docker run -d --name $(IMAGE_NAME) \
 	--link rabbit:rabbit \
+	--link tarantool:tarantool \
 	$(IMAGE_NAME)
 
 bash:

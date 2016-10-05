@@ -1,4 +1,4 @@
-IMAGE_NAME = node
+IMAGE_NAME = telegram_receiver
 
 build:
 	docker build -t $(IMAGE_NAME) .
@@ -6,7 +6,7 @@ build:
 run:
 	-docker rm -f $(IMAGE_NAME)
 	-docker run -d --name $(IMAGE_NAME) --restart="always" \
-	--link tarantool:tarantool \
+	--link rabbit:rabbit \
 	$(IMAGE_NAME)
 
 bash:
