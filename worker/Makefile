@@ -1,9 +1,10 @@
 IMAGE_NAME = worker
 
 build:
-	cp ../lib/* ./lib/
+	-rm -r lib
+	cp -r ../lib ./lib
 	docker build -t $(IMAGE_NAME) .
-
+	-rm -r lib
 run:
 	-docker rm -f $(IMAGE_NAME)
 	-docker run -d --name $(IMAGE_NAME) \

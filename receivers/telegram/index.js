@@ -1,3 +1,4 @@
+"use strict";
 let telegram = require('telegram-bot-api');
 
 let queue;

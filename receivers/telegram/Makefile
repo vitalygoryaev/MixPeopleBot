@@ -1,7 +1,10 @@
 IMAGE_NAME = telegram_receiver
 
 build:
+	-rm -r lib
+	cp -r ../../lib ./lib
 	docker build -t $(IMAGE_NAME) .
+	-rm -r lib
 
 run:
 	-docker rm -f $(IMAGE_NAME)
