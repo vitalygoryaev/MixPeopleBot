@@ -1,6 +1,7 @@
 IMAGE_NAME = worker
 
 build:
+	cp ../lib/* ./lib/
 	docker build -t $(IMAGE_NAME) .
 
 run:
