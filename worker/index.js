@@ -36,6 +36,7 @@ amqp.get('rabbit', 'worker', 'workwork', 'messages')
                 .then(user => {
                     processMessage(user, content.message);
                 })
+		.catch(console.log);
         })
     })
 
@@ -72,6 +73,7 @@ function processMessage(user, message) {
                 .then(result => {
                     console.log('got result from unlinkAndStop tarantool\n', result);
                 })
+		.catch(console.warn)
         }
 
 		return;
@@ -89,6 +91,7 @@ function processMessage(user, message) {
 	}
 
 	if (user.status === 'talking') {
+		console.log('user is talking to', user.opponent);
 		tarantool.getUserById(user.opponent)
             .then(result => {
                 console.log('got result from getUserById tarantool\n', result);
@@ -103,5 +106,6 @@ function processMessage(user, message) {
                 console.log('pushing message to vendor queue', message, 'to user', opponent);
                 vendorQueues[opponent.vendor].push({ user: opponent, message });
             })
+		.catch(console.warn);
 	}
 }

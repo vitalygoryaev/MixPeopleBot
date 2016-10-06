@@ -1,9 +1,7 @@
 IMAGE_NAME = tarantool
 
-build:
-	docker build -t $(IMAGE_NAME) .
-
 run:
+	docker build -t $(IMAGE_NAME) .
 	-docker rm -f $(IMAGE_NAME)
 	-docker run -d --name $(IMAGE_NAME) --restart="always" \
 	-e "ADMIN_PASSWORD=secretpassword" \
