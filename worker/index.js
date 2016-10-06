@@ -47,13 +47,16 @@ function processMessage(user, message) {
         if (user.status === 'idle') {
             tarantool.link(user.id)
                 .then(result => {
-                    console.log('got result from link tarantool\n', result);
-                    
-                    let content = { user: result.user, message };
-                    vendorQueues[result.user.vendor].push(content);
+                    if (result.success) {
+                        result = result.result;
+                        console.log('got result from link tarantool\n', result);
+                        
+                        let content = { user: result.user, message };
+                        vendorQueues[result.user.vendor].push(content);
 
-                    content = { user: result.opponent, message };
-                    vendorQueues[result.opponent.vendor].push(content);
+                        content = { user: result.opponent, message };
+                        vendorQueues[result.opponent.vendor].push(content);
+                    }
                 })
 		.catch(console.warn);
         }
