@@ -2,7 +2,7 @@
 
 box.cfg {
 	listen=3301,
-	slab_alloc_arena=0.5
+	slab_alloc_arena=0.2
 }
 
 box.schema.user.passwd('admin', os.getenv("ADMIN_PASSWORD"))

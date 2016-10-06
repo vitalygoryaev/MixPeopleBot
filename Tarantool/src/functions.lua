@@ -45,6 +45,10 @@ function unlinkAndStop(userId)
 		user = unlink(userId)
 	end
 
+	if user[5] == 'waiting' then
+		box.space.waitingUsers:delete(user[1])
+	end
+
 	user = box.space.users:update(user[1], {{ '=', 5, 'idle' }})
 
 	return successJson(getUserObject(user))
