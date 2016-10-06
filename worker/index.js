@@ -2,8 +2,9 @@
 let queue;
 let tarantool;
 let vendorQueues = {}
+let amqp = require('./lib/queue.js');
 
-require('./lib/queue.js').get('rabbit', 'worker', 'workwork', 'messages')
+amqp.get('rabbit', 'worker', 'workwork', 'messages')
     .then(q => {
         queue = q;
 
@@ -12,12 +13,12 @@ require('./lib/queue.js').get('rabbit', 'worker', 'workwork', 'messages')
     .then(t => {
         tarantool = t;
 
-        return require('./lib/queue.js').get('rabbit', 'worker', 'workwork', 'telegram')
+        return amqp.get('rabbit', 'worker', 'workwork', 'telegram')
     })
     .then(telegram => {
         vendorQueues['telegram'] = telegram;
     })
-    .then(() => {
+    .then(() => {	
         queue.subscribe(function handler(content) {
             console.log(content.vendor);
             console.log('got message from queue: ', content.message);
