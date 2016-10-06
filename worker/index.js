@@ -86,20 +86,19 @@ function processMessage(user, message) {
 	}
 
 	if (user.status === 'talking') {
-		tarantool.getUser(content.vendor, content.message.chat.id, content.message.chat.first_name)
-                .then(result => {
-                    console.log('got result from getUser tarantool\n', result);
+		tarantool.getUserById(user.opponent)
+            .then(result => {
+                console.log('got result from getUserById tarantool\n', result);
 
-                    if (!result.success) {
-                        return reject(result);
-                    }
+                if (!result.success) {
+                    return reject(result);
+                }
 
-                    return result.result;
-                })
-                .then(user => {
-                    processMessage(user, content.message);
-                })
-
-		passMessageToOpponent(userId, message);
+                return result.result;
+            })
+            .then(opponent => {
+                console.log('pushing message to vendor queue', message, 'to user', opponent);
+                vendorQueues[opponent.vendor].push({ user: opponent, message });
+            })
 	}
 }

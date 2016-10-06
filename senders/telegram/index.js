@@ -9,10 +9,10 @@ require('./lib/queue.js').get('rabbit', 'worker', 'workwork', 'telegram')
 		let api = initTelegram();
         
         queue.subscribe(function handler(content) {
-            console.log('got message from queue: ', content.message);
+            console.log('got new message to send: ', content);
 
             api.sendMessage({
-				chat_id: content.message.chat.id,
+				chat_id: content.user.vendorUserId,
 				text: content.message.text
 			});
         })

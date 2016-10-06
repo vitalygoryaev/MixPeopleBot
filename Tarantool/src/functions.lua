@@ -79,6 +79,10 @@ end
 function getUserById(userId)
 	local user = box.space.users:get({ userId })
 
+	if not user then
+		return failJson({ 'user not found' })
+	end
+
 	return successJson(getUserObject(user))
 end
 
