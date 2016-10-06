@@ -1,6 +1,7 @@
 "use strict";
 let queue;
 let tarantool;
+let vendorQueues = {}
 
 require('./lib/queue.js').get('rabbit', 'worker', 'workwork', 'messages')
     .then(q => {
@@ -11,6 +12,12 @@ require('./lib/queue.js').get('rabbit', 'worker', 'workwork', 'messages')
     .then(t => {
         tarantool = t;
 
+        return require('./lib/queue.js').get('rabbit', 'worker', 'workwork', 'telegram')
+    })
+    .then(telegram => {
+        vendorQueues['telegram'] = telegram;
+    })
+    .then(() => {
         queue.subscribe(function handler(content) {
             console.log(content.vendor);
             console.log('got message from queue: ', content.message);
@@ -40,30 +47,17 @@ function processMessage(user, message) {
             tarantool.link(user.id)
                 .then(result => {
                     console.log('got result from link tarantool\n', result);
-                });
+                    
+                    let content = { user: result.user, message };
+                    vendorQueues[result.user.vendor].push(content);
+
+                    content = { user: result.opponent, message };
+                    vendorQueues[result.opponent.vendor].push(content);
+                })
         }
 
         return;
 	}
-
-	// if (message.text === '/settings') {
-	// 	if (user) {
-	// 		sendText(userId, "Settings", keyboards.settingsKeyboard);
-	// 	}
-
-	// 	return;
-	// }
-
-    // if (message.text === '/name') {
-    //     let user = users[userId];
-
-    //     if (user) {
-    //         sendText(userId, "Set you name", keyboards.nameKeyboard);
-    //         user.status = status.WAITINGFORNAME;
-    //     }
-
-    //     return;
-    // }
 
 	if (message.text === '/stop') {
         console.log('found /stop command');
@@ -88,14 +82,6 @@ function processMessage(user, message) {
 
 		return;
 	}
-
-    // if (user.status === status.WAITINGFORNAME) {
-    //     let user = users[userId];
-    //     user.name = message.text;
-    //     user.status = status.WAITING;
-    //     sendText(userId, "You new name is " + message.text, keyboards.activeKeyboard);
-    //     return;
-    // }
 
 	// passMessageToOpponent(userId, message);
 }

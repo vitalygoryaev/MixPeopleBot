@@ -1,12 +1,13 @@
-IMAGE_NAME = node
-
-build:
-	docker build -t $(IMAGE_NAME) .
+IMAGE_NAME = telegram_sender
 
 run:
+	-rm -r lib
+	cp -r ../../lib ./lib
+	docker build -t $(IMAGE_NAME) .
+	-rm -r lib
 	-docker rm -f $(IMAGE_NAME)
 	-docker run -d --name $(IMAGE_NAME) --restart="always" \
-	--link tarantool:tarantool \
+	--link rabbit:rabbit \
 	$(IMAGE_NAME)
 
 bash:

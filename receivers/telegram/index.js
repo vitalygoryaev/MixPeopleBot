@@ -29,7 +29,8 @@ function initTelegram(queue) {
 		});
 
 	api.on('message', function(message) {
-		queue.push('telegram', message);
+		let content = { vendor: 'telegram', message };
+		queue.push(content);
 	});
 }
 
