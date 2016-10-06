@@ -76,6 +76,12 @@ function getUser(vendor, vendorUserId, name)
 	return successJson(getUserObject(user))
 end
 
+function getUserById(userId)
+	local user = box.space.users:get({ userId })
+
+	return successJson(getUserObject(user))
+end
+
 function unlink(userId)
 	local user = box.space.users:get({ userId })
 
@@ -101,5 +107,6 @@ function failJson(errorList)
 end
 
 function getUserObject(user)
+	if not user then return nil end
 	return { id = user[1], vendor = user[2], vendorUserId = user[3], name = user[4], status = user[5], opponent = user[6]}
 end
