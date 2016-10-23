@@ -95,10 +95,10 @@ function unlink(userId)
 
 	if user[6] then
 		local opponent = box.space.users:get({ user[6] })
-		opponent = box.space.users:update(opponent[1], {{ '=', 5, 'waiting' }, { '=', 6, nil }})
+		opponent = box.space.users:update(opponent[1], {{ '=', 5, 'waiting' }, { '=', 6, 0 }})
 	end
 
-	user = box.space.users:update(user[1], {{ '=', 5, 'waiting' }, { '=', 6, nil }})
+	user = box.space.users:update(user[1], {{ '=', 5, 'waiting' }, { '=', 6, 0 }})
 	return user
 end 
 
