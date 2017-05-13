@@ -5,7 +5,6 @@ const TELEGRAM_TOKEN = '226303585:AAESI73YnfVa3v8gxVAhXCmc0eEvG7tUePY';
 class Telegram {
     constructor() {
         this.initialize(TELEGRAM_TOKEN);
-
         this.handleMessage = this.handleMessage.bind(this);
     }
 
@@ -30,12 +29,13 @@ class Telegram {
     }
 
     handleMessage(message) {
-        // console.log('received message', message);
-
         this.sendMessage(message.chat, message.text);
 
-        // let content = { vendor: 'telegram', message };
-        // queue.push(content);
+        this.sendPhotoByUrl(message.chat, 'https://pp.userapi.com/c836735/v836735560/33544/6E3dR1IoLFs.jpg');
+    }
+
+    sendPhotoByUrl(chat, url) {
+        this.api.sendPhoto(chat.id, url);
     }
 
     sendMessage(chat, text) {
