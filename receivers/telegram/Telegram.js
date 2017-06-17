@@ -6,11 +6,18 @@ class Telegram {
     constructor() {
         this.initialize(TELEGRAM_TOKEN);
         this.handleMessage = this.handleMessage.bind(this);
+        this.commandHandlers = {};
+        this.textHandlers = [];
+        this.userContext = {};
+    }
+
+    getUserContext(chatId) {
+        return this.userContext[chatId];
     }
 
     async initialize(token) {
         try {
-            this.api = new TelegramApi(token, {polling: true});
+            this.api = new TelegramApi(token, { polling: true });
 
             const botInfo = await this.api.getMe();
 
@@ -29,9 +36,10 @@ class Telegram {
     }
 
     handleMessage(message) {
-        this.sendMessage(message.chat, message.text);
+        const userContext = this.getUserContext(message.chat.id);
 
-        this.sendPhotoByUrl(message.chat, 'https://pp.userapi.com/c836735/v836735560/33544/6E3dR1IoLFs.jpg');
+        this.handleMessageWithCommand(message, userContext);
+        this.handleText(message, userContext);
     }
 
     sendPhotoByUrl(chat, url) {
@@ -40,6 +48,42 @@ class Telegram {
 
     sendMessage(chat, text) {
         return this.api.sendMessage(chat.id, text);
+    }
+
+    subscribeToCommand(commandText, handler) {
+        if (!this.commandHandlers[commandText]) {
+            this.commandHandlers[commandText] = [];
+        }
+
+        this.commandHandlers[commandText].push(handler);
+    }
+
+    subscribeToText(handler) {
+        this.textHandlers.push(handler);
+    }
+
+    handleMessageWithCommand(message, userContext) {
+        if (message.entities) {
+            message.entities.map(({ type, offset, length }) => {
+                if (type === 'bot_command') {
+                    const commandText = message.text.substr(offset, length);
+
+                    this.handleCommand(commandText, message, userContext);
+                }
+            })
+        }
+    }
+
+    handleCommand(commandText, message, userContext) {
+        for (const handler of this.commandHandlers[commandText]) {
+            handler(this, message, userContext);
+        }
+    }
+
+    handleText(message, userContext) {
+        for (const handler of this.textHandlers) {
+            handler(this, message, userContext);
+        }
     }
 }
 
