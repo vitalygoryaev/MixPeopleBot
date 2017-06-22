@@ -6,9 +6,9 @@ const defaultHandler = require('../commandHandlers/default');
 const startHandler = require('../commandHandlers/start');
 
 module.exports = {
-    '/echo': { handler: echoHandler },
-    '/image': { handler: imageHandler },
-    '/wallpapers': { handler: wallpapersHandler, nextNode: wallpaperList },
-    '/start': { handler: startHandler },
-    default: { handler: defaultHandler }
+  '/echo': { handler: echoHandler },
+  '/image': { handler: imageHandler },
+  '/wallpapers': { handler: wallpapersHandler, nextNode: wallpaperList },
+  '/start': { handler: startHandler },
+  default: { handler: defaultHandler },
 };

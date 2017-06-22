@@ -3,45 +3,41 @@ const TelegramApi = require('./TelegramApi');
 let instance;
 
 class TelegramSender {
-    constructor() {
-        if (!instance) {
-            this.telegram = new TelegramApi();
+  constructor() {
+    if (!instance) {
+      this.telegram = new TelegramApi();
 
-            instance = this;
-        }
-
-        return instance;
+      instance = this;
     }
 
-    sendMultipleImages(chat, ...images) {
-        let promise = Promise.resolve();
+    return instance;
+  }
 
-        images.map(({ url, markup }) => {
-            promise = promise.then(() => {
-                return this.sendImageByUrl(chat, url, markup);
-            });
-        });
+  sendMultipleImages(chat, ...images) {
+    let promise = Promise.resolve();
 
-        return promise;
-    }
+    images.map(({ url, markup }) => {
+      promise = promise.then(() => this.sendImageByUrl(chat, url, markup));
+    });
 
-    sendImageByUrl(chat, url, markup) {
-        return this.telegram.api.sendPhoto(chat.id, url, markup);
-    }
+    return promise;
+  }
 
-    sendMessage(chat, text, opts) {
-        return this.telegram.api.sendMessage(chat.id, text, opts);
-    }
+  sendImageByUrl(chat, url, markup) {
+    return this.telegram.api.sendPhoto(chat.id, url, markup);
+  }
 
-    sendMultipleMessages(chat, ...messageList) {
-        let promise = Promise.resolve();
+  sendMessage(chat, text, opts) {
+    return this.telegram.api.sendMessage(chat.id, text, opts);
+  }
 
-        messageList.map(item => {
-            promise = promise.then(() => {
-                return this.sendMessage(chat, item);
-            });
-        });
-    }
+  sendMultipleMessages(chat, ...messageList) {
+    let promise = Promise.resolve();
+
+    messageList.map((item) => {
+      promise = promise.then(() => this.sendMessage(chat, item));
+    });
+  }
 }
 
 module.exports = TelegramSender;
