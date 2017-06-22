@@ -1,6 +1,8 @@
 const TelegramApi = require('./TelegramApi');
 const root = require('./tree/root');
 
+const commandRegex = /^\/\w*/;
+
 const defaultUserContext = {
     node: root
 };
@@ -47,38 +49,22 @@ class TelegramReceiver {
     }
 
     handleMessageWithContext(message, userContext) {
-        const currentNode = userContext.node;
+        const commandText = commandRegex.exec(message.text)[0] || '';
 
-        if (message.entities) {
-            message.entities.map(({ type, offset, length }) => {
-                if (type === 'bot_command') {
-                    const commandText = message.text.substr(offset, length);
-
-                    return this.handleCommand(commandText, message, userContext, currentNode);
-                }
-            })
-        } else {
-            return this.handleCommand('', message, userContext, currentNode);
-        }
+        return this.handleCommand(commandText, message, userContext);
     }
 
     handleCallbackQuery(callbackQuery) {
-        console.log(callbackQuery);
-
         return Promise.resolve(this.handleMessage({
             ...callbackQuery.message,
-            entities: [{
-                type: 'bot_command',
-                offset: 0,
-                length: callbackQuery.data.length
-            }],
             text: callbackQuery.data
         }))
             .then(() => this.telegram.api.answerCallbackQuery(callbackQuery.id));
     }
 
-    handleCommand(commandText, message, userContext, currentNode) {
-        const action = currentNode[commandText];
+    handleCommand(commandText, message, userContext) {
+        const { node: currentNode = {} } = userContext;
+        const { [commandText]: action } = currentNode;
 
         if (!action && currentNode !== root) {
             this.setNextNode(userContext, root);

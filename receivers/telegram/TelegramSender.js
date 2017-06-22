@@ -13,8 +13,20 @@ class TelegramSender {
         return instance;
     }
 
-    sendPhotoByUrl(chat, url) {
-        return this.telegram.api.sendPhoto(chat.id, url);
+    sendMultipleImages(chat, ...images) {
+        let promise = Promise.resolve();
+
+        images.map(({ url, markup }) => {
+            promise = promise.then(() => {
+                return this.sendImageByUrl(chat, url, markup);
+            });
+        });
+
+        return promise;
+    }
+
+    sendImageByUrl(chat, url, markup) {
+        return this.telegram.api.sendPhoto(chat.id, url, markup);
     }
 
     sendMessage(chat, text, opts) {
