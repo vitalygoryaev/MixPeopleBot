@@ -7,7 +7,6 @@ function handleStart(message) {
     reply_markup: JSON.stringify({
       inline_keyboard: [
         [{ text: 'Show wallpapers', callback_data: '/wallpapers' }],
-        [{ text: 'Show image', callback_data: '/image' }],
       ],
     }),
   });

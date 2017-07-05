@@ -1,3 +1,3 @@
 const TelegramReceiver = require('./TelegramReceiver');
 
-TelegramReceiver();
+new TelegramReceiver();

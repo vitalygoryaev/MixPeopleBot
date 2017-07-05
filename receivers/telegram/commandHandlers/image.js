@@ -1,5 +1,5 @@
 const TelegramSender = require('../TelegramSender');
-const wallpaperList = require('./wallpaperList');
+const wallpaperList = require('../resources/combinedWallpaperList');
 
 function handleImage(message) {
   const sender = new TelegramSender();

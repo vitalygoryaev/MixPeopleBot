@@ -38,6 +38,8 @@ class TelegramReceiver {
   }
 
   handleMessage(message) {
+    console.log(message);
+
     let userContext = this.getUserContext(message.chat);
 
     if (!userContext) {
@@ -49,7 +51,8 @@ class TelegramReceiver {
   }
 
   handleMessageWithContext(message, userContext) {
-    const commandText = commandRegex.exec(message.text)[0] || '';
+    const commandRegexResult = message.text && commandRegex.exec(message.text);
+    const commandText = commandRegexResult && commandRegexResult[0] || '';
 
     return this.handleCommand(commandText, message, userContext);
   }

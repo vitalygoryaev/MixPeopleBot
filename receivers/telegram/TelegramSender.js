@@ -31,6 +31,10 @@ class TelegramSender {
     return this.telegram.api.sendMessage(chat.id, text, opts);
   }
 
+  sendDocument(chat, url, markup) {
+    return this.telegram.api.sendDocument(chat.id, url, markup);
+  }
+
   sendMultipleMessages(chat, ...messageList) {
     let promise = Promise.resolve();
 

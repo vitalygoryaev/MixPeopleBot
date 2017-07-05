@@ -7,9 +7,7 @@ function handleDefault(message) {
 
   sender.sendMultipleMessages(
     message.chat,
-    'sorry we didn\'t recognize your intent',
-    'here\'s the list of available commands:',
-    ...rootCommandList,
+    `sorry we didn't recognize your intent\nhere's the list of available commands:\n${rootCommandList.join('\n')}`,
   );
 }
 
