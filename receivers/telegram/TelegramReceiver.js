@@ -15,6 +15,9 @@ class TelegramReceiver {
     this.commandHandlers = {};
     this.textHandlers = [];
     this.userContext = {};
+  }
+
+  receive() {
     this.subscribe();
   }
 
