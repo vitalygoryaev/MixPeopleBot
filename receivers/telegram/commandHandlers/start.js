@@ -7,6 +7,8 @@ function handleStart(message) {
     reply_markup: JSON.stringify({
       inline_keyboard: [
         [{ text: 'Show wallpapers', callback_data: '/wallpapers' }],
+        [{ text: 'Subscribe to new Youtube videos', callback_data: '/youtubeSubscribe' }],
+        [{ text: 'Unsubscribe from Youtube uploads', callback_data: '/youtubeUnsubscribe' }],
       ],
     }),
   });

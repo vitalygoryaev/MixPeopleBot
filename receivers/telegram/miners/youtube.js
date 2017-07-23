@@ -1,18 +1,16 @@
 const googleapis = require('googleapis');
 const promisify = require('es6-promisify');
-const EventEmitter = require('events');
 const { NEW_YOUTUBE_VIDEO } = require('../events');
+const { queryLatestYoutubeVideoId, persistLatestYoutubeVideoId } = require('../dataLayer');
 
 const youtube = googleapis.youtube('v3');
 const getVideoList = promisify(youtube.search.list);
-const eventEmitter = new EventEmitter();
 
 const TEN_SECONDS = 10 * 1000;
 
 class YoutubeMiner {
   constructor(accountSettings, eventEmitter) {
     this.accountSettings = accountSettings;
-    this.latestVideoId = '';
     this.minerInterval = null;
     this.eventEmitter = eventEmitter;
   }
@@ -35,13 +33,19 @@ class YoutubeMiner {
 
   mine() {
     this.minerInterval = setInterval(async () => {
-      const videoId = await this.getLatestVideoId();
+      const latestVideoId = await this.getLatestVideoId();
+      const currentLatestVideoId = await queryLatestYoutubeVideoId();
 
-      if (videoId && this.latestVideoId !== videoId) {
+      if (
+        latestVideoId
+        && currentLatestVideoId !== latestVideoId
+      ) {
+        persistLatestYoutubeVideoId(latestVideoId);
+
         // NOTIFY ALL SUBSCRIBERS
-        this.eventEmitter.emit(NEW_YOUTUBE_VIDEO, { url: `https://www.youtube.com/watch?v=${videoId}` });
+        this.eventEmitter.emit(NEW_YOUTUBE_VIDEO, { url: `https://www.youtube.com/watch?v=${latestVideoId}` });
 
-        this.latestVideoId = videoId;
+        this.latestVideoId = latestVideoId;
       }
     }, TEN_SECONDS);
   }

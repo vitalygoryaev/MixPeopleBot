@@ -1,0 +1,10 @@
+{
+  "dev": {
+    "driver": "pg",
+    "user": { "ENV": "POSTGRES_USER" },
+    "password": { "ENV": "POSTGRES_PASSWORD" },
+    "host": "localhost",
+    "database": "postgres",
+    "schema": "garyveebot"
+  }
+}

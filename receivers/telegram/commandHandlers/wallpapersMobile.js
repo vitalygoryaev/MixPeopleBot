@@ -40,7 +40,7 @@ const addMoreButtonToLastItem = (list) => {
   ];
 };
 
-function handleWallpapersMobile(message) {
+const handleWallpapersMobile = (message) => {
   const sender = new TelegramSender();
   const trimmedList = getRandomItemsFromList(wallpaperList, PAGINATION_COUNT);
   const listWithMoreMarkup = addMoreButtonToLastItem(trimmedList);
@@ -49,6 +49,6 @@ function handleWallpapersMobile(message) {
     message.chat,
     ...listWithMoreMarkup,
   );
-}
+};
 
 module.exports = handleWallpapersMobile;
