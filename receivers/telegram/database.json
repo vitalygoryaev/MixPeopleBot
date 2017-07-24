@@ -4,7 +4,6 @@
     "user": { "ENV": "POSTGRES_USER" },
     "password": { "ENV": "POSTGRES_PASSWORD" },
     "host": "localhost",
-    "database": "postgres",
-    "schema": "garyveebot"
+    "database": "postgres"
   }
 }
