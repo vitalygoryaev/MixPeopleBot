@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "PGUSER=postgres PGHOST=localhost PGPASSWORD=toor PGDATABASE=postgres PGPORT=5432 node --harmony index.js",
-    "migrate": "POSTGRES_USER=postgres POSTGRES_PASSWORD=toor db-migrate"
+    "server": "PGUSER=postgres PGHOST=localhost PGPASSWORD=toor PGPORT=5432 node --harmony index.js",
+    "start": "npm run migrate up && npm run server",
+    "migrate": "PGUSER=postgres PGPASSWORD=toor PGHOST=localhost db-migrate"
   },
   "author": "",
   "license": "MIT",
