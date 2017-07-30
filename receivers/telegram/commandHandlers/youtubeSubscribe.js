@@ -4,13 +4,10 @@ const {
   persistChatToYoutubeSubscriptions,
   queryYoutubeSubscription,
 } = require('../dataLayer');
-const persistChatIfNotExists = require('../utils/persistChatIfNotExists');
 
 const handleYoutubeSubscribe = async (message) => {
   const { chat } = message;
   const sender = new TelegramSender();
-
-  await persistChatIfNotExists(chat);
 
   const subscribedChatId = await queryYoutubeSubscription(chat.id);
 
@@ -24,11 +21,11 @@ const handleYoutubeSubscribe = async (message) => {
 
   const latestVideoId = await queryLatestYoutubeVideoId();
 
+  await sender.sendMessage(chat, 'Now you will receive a notification each time Gary uploads a new video');
+
   if (latestVideoId) {
     await sender.sendMessage(chat, `Currently the latest video is https://www.youtube.com/watch?v=${latestVideoId}`);
   }
-
-  await sender.sendMessage(chat, 'Now you will receive a notification each time Gary uploads a new video');
 };
 
 module.exports = handleYoutubeSubscribe;

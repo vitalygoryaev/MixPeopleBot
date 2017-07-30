@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "PGUSER=postgres PGHOST=localhost PGPASSWORD=toor PGPORT=5432 node --harmony index.js",
+    "server": "PGUSER=postgres PGHOST=localhost PGPASSWORD=toor PGPORT=5432 PGDATABSE=postgres node --harmony index.js",
     "start": "npm run migrate up && npm run server",
-    "migrate": "PGUSER=postgres PGPASSWORD=toor PGHOST=localhost db-migrate"
+    "migrate": "PGUSER=postgres PGPASSWORD=toor PGHOST=localhost PGDATABASE=postgres db-migrate"
   },
   "author": "",
   "license": "MIT",
@@ -17,6 +17,7 @@
     "es6-promisify": "^5.0.0",
     "google-auth-library": "^0.10.0",
     "googleapis": "^20.1.0",
+    "node-fetch": "^1.7.1",
     "node-telegram-bot-api": "^0.27.1",
     "pg": "^7.0.2"
   },

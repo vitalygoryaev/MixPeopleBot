@@ -9,6 +9,8 @@ const wallpapersDesktop = require('../commandHandlers/wallpapersDesktop');
 const fileHandler = require('../commandHandlers/file');
 const handleYoutubeSubscribe = require('../commandHandlers/youtubeSubscribe');
 const handleYoutubeUnsubscribe = require('../commandHandlers/youtubeUnsubscribe');
+const handleInstagramPostsSubscribe = require('../commandHandlers/instagramPostsSubscribe');
+const handleInstagramPostsUnsubscribe = require('../commandHandlers/instagramPostsUnsubscribe');
 
 module.exports = {
   '/echo': { handler: echoHandler },
@@ -20,5 +22,7 @@ module.exports = {
   '/file': { handler: fileHandler },
   '/youtubeSubscribe': { handler: handleYoutubeSubscribe },
   '/youtubeUnsubscribe': { handler: handleYoutubeUnsubscribe },
+  '/instagramPostsSubscribe': { handler: handleInstagramPostsSubscribe },
+  '/instagramPostsUnsubscribe': { handler: handleInstagramPostsUnsubscribe },
   default: { handler: defaultHandler },
 };

@@ -1,5 +1,6 @@
 const TelegramReceiver = require('./TelegramReceiver');
 const YoutubeMiner = require('./miners/youtube');
+const InstagramMiner = require('./miners/instagram');
 const EventEmitter = require('events');
 const { NEW_YOUTUBE_VIDEO } = require('./events');
 const handleNewVideo = require('./commandHandlers/newVideo');
@@ -12,6 +13,7 @@ const eventEmitter = new MyEventEmitter();
 
 const telegram = new TelegramReceiver();
 const youtube = new YoutubeMiner({ apikey: youtubeApiKey }, eventEmitter);
+const instagram = new InstagramMiner(eventEmitter);
 
 eventEmitter.on(NEW_YOUTUBE_VIDEO, ({ url }) => {
   handleNewVideo(url);
@@ -19,3 +21,4 @@ eventEmitter.on(NEW_YOUTUBE_VIDEO, ({ url }) => {
 
 telegram.receive();
 youtube.mine();
+instagram.mine();

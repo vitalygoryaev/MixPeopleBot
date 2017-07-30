@@ -44,8 +44,6 @@ class YoutubeMiner {
 
         // NOTIFY ALL SUBSCRIBERS
         this.eventEmitter.emit(NEW_YOUTUBE_VIDEO, { url: `https://www.youtube.com/watch?v=${latestVideoId}` });
-
-        this.latestVideoId = latestVideoId;
       }
     }, TEN_SECONDS);
   }
