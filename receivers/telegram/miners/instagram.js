@@ -9,9 +9,15 @@ const getInstagramMedia = async function getInstagramMedia() {
     return [];
   }
 
-  const jsonResult = await mediaResult.json();
+  try {
+    const jsonResult = await mediaResult.json();
 
-  return jsonResult.items;
+    return jsonResult.items;
+  } catch (error) {
+    console.error(error);
+
+    return [];
+  }
 };
 
 const getLatestPost = async function getLatestPost() {
@@ -21,7 +27,7 @@ const getLatestPost = async function getLatestPost() {
   return latestPost;
 };
 
-const TWO_SECONDS = 2 * 1000;
+const FIVE_SECONDS = 5 * 1000;
 
 class YoutubeMiner {
   constructor(eventEmitter) {
@@ -32,6 +38,11 @@ class YoutubeMiner {
   mine() {
     this.minerInterval = setInterval(async () => {
       const latestPost = await getLatestPost();
+
+      if (!latestPost) {
+        return;
+      }
+
       const { id: latestPostId } = latestPost;
       const currentLatestPost = await queryLatestInstagramPost();
       const currentLatestPostId = currentLatestPost && currentLatestPost.postId;
@@ -45,7 +56,7 @@ class YoutubeMiner {
         // NOTIFY ALL SUBSCRIBERS
         this.eventEmitter.emit(NEW_INSTAGRAM_POST, latestPost);
       }
-    }, TWO_SECONDS);
+    }, FIVE_SECONDS);
   }
 
   stopMining() {

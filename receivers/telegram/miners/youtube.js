@@ -16,24 +16,35 @@ class YoutubeMiner {
   }
 
   async getLatestVideoId() {
-    const videoList = await getVideoList(
-      {
-        auth: this.accountSettings.apikey,
-        part: 'id',
-        channelId: 'UCctXZhXmG-kf3tlIXgVZUlw',
-        order: 'date',
-        maxResults: 1,
-      },
-    );
+    try {
+      const videoList = await getVideoList(
+        {
+          auth: this.accountSettings.apikey,
+          part: 'id',
+          channelId: 'UCctXZhXmG-kf3tlIXgVZUlw',
+          order: 'date',
+          maxResults: 1,
+        },
+      );
 
-    const { items: [{ id: { videoId } }] } = videoList;
+      const { items: [{ id: { videoId } }] } = videoList;
 
-    return videoId;
+      return videoId;
+    } catch (error) {
+      console.log(error);
+
+      return undefined;
+    }
   }
 
   mine() {
     this.minerInterval = setInterval(async () => {
       const latestVideoId = await this.getLatestVideoId();
+
+      if (!latestVideoId) {
+        return;
+      }
+
       const currentLatestVideoId = await queryLatestYoutubeVideoId();
 
       if (
